@@ -1,0 +1,110 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: apl-demo-oauth
+  namespace: agent-promotion
+  annotations:
+    serviceaccounts.openshift.io/oauth-redirectreference.primary: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"apl-demo"}}'
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apl-demo
+  namespace: agent-promotion
+  labels:
+    app: apl-demo
+    app.kubernetes.io/part-of: agent-promotion-line
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apl-demo
+  template:
+    metadata:
+      labels:
+        app: apl-demo
+    spec:
+      serviceAccountName: apl-demo-oauth
+      containers:
+        - name: oauth-proxy
+          image: registry.redhat.io/openshift4/ose-oauth-proxy:latest
+          args:
+            - --https-address=:8443
+            - --provider=openshift
+            - --openshift-service-account=apl-demo-oauth
+            - --upstream=http://localhost:3000
+            - --tls-cert=/etc/tls/private/tls.crt
+            - --tls-key=/etc/tls/private/tls.key
+            - --cookie-secret=YWdlbnQtcHJvbW90aW9uLWxpbmU=
+            - --pass-basic-auth=false
+          ports:
+            - containerPort: 8443
+              name: https
+          volumeMounts:
+            - name: tls
+              mountPath: /etc/tls/private
+              readOnly: true
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
+        - name: demo
+          image: image-registry.openshift-image-registry.svc:5000/agent-promotion/apl-demo:latest
+          ports:
+            - containerPort: 3000
+              name: http
+          volumeMounts:
+            - name: nginx-conf
+              mountPath: /etc/nginx/conf.d
+              readOnly: true
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
+      volumes:
+        - name: tls
+          secret:
+            secretName: apl-demo-tls
+        - name: nginx-conf
+          configMap:
+            name: apl-demo-nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apl-demo
+  namespace: agent-promotion
+  labels:
+    app: apl-demo
+  annotations:
+    service.beta.openshift.io/serving-cert-secret-name: apl-demo-tls
+spec:
+  selector:
+    app: apl-demo
+  ports:
+    - port: 8443
+      targetPort: 8443
+      name: https
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: apl-demo
+  namespace: agent-promotion
+  labels:
+    app: apl-demo
+spec:
+  to:
+    kind: Service
+    name: apl-demo
+  port:
+    targetPort: https
+  tls:
+    termination: reencrypt
+    insecureEdgeTerminationPolicy: Redirect

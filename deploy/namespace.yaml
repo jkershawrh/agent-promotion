@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: agent-promotion
+  labels:
+    app.kubernetes.io/part-of: agent-promotion-line
+  annotations:
+    openshift.io/display-name: "Agent Promotion Line"
+    openshift.io/description: "Governed authority for autonomous agents"
