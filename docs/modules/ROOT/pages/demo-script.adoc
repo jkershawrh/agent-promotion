@@ -1,0 +1,192 @@
+= Demo Script
+:toc: left
+:toclevels: 3
+
+This is a step-by-step script with exact clicks and expected results.
+Use this when you need precision -- the xref:presenter-guide.adoc[Presenter Guide] covers what to say; this document covers what to click and what to expect.
+
+== Pre-Demo Checklist
+
+. Open the Agent Promotion Line demo URL in your browser
+. Verify the sidebar shows five layers (0: The Hook, 1: The Earn, 2: The Depth, 3: The Floor, 4: The Close)
+. Verify the agent-promotion-line service is running (check the Close layer for a non-empty roster, or curl `GET /api/v1/authority/health-probe`)
+. Press `R` or click Reset to clear any previous demo state
+. Verify Layer 0 shows "The Hook" with a "Send action to the gate" button
+
+== Layer 0: The Hook
+
+=== Step 1: Enter Layer 0
+
+*Click:* Sidebar "The Hook" or press `0`
+
+*What appears:*
+
+* TierPipeline showing T0 through T4 as nodes, agent positioned at T0
+* ActionQueue showing three queued actions (Scale frontend, Failover region east, Migrate production database)
+* A blue "Send action to the gate" button
+
+*Duration:* Presenter narrates before clicking.
+
+=== Step 2: Send action to the gate
+
+*Click:* "Send action to the gate"
+
+*What appears:*
+
+* GateDecision card appears with red "REFUSED" animation (shake)
+* Verdict: route_human or refuse
+* Consequence: 30, Ceiling: 0
+* TierPipeline edge from T0 to T1 shows red "BLOCKED" label
+* NarrativeCard appears with humor beat and turn
+
+*Watch for:* The shake animation on the gate card and the "BLOCKED" label on the pipeline edge.
+
+== Layer 1: The Earn
+
+=== Step 1: Enter Layer 1
+
+*Click:* Sidebar "The Earn" or press `1`
+
+*What appears:*
+
+* TierPipeline with agent at T0
+* TrackRecord component showing 0/50 chains, 0% accuracy
+* A blue "Build track record" button
+
+=== Step 2: Build track record
+
+*Click:* "Build track record (55 verified chains)"
+
+*What appears:*
+
+* TrackRecord fills with 55 green chain dots (animated, staggered)
+* Accuracy gauge fills to 100%
+* Chain count shows 55/50
+* Button changes to "Evaluate for promotion"
+
+*Duration:* ~2 seconds for the chain fill animation.
+
+=== Step 3: Evaluate for promotion
+
+*Click:* "Evaluate for promotion"
+
+*What appears:*
+
+* PromotionEvent card appears with green "PROMOTED" label
+* Shows T0 to T1 with spring animation
+* TierPipeline updates: agent moves to T1, T1 node highlighted
+* Button changes to "Test a low-risk action at T1"
+
+=== Step 4: Test a low-risk action
+
+*Click:* "Test a low-risk action at T1"
+
+*What appears:*
+
+* GateDecision card with green "ALLOWED" pulse animation
+* Consequence: 10, Ceiling: 25
+* NarrativeCard appears with humor beat and turn
+
+== Layer 2: The Depth
+
+=== Step 1: Enter Layer 2
+
+*Click:* Sidebar "The Depth" or press `2`
+
+*What appears:*
+
+* TierPipeline with agent at T2
+* Operating mode card showing "HITL_HIGH_TIER"
+* An amber "Evaluate for T2 to T3 promotion" button
+
+=== Step 2: Trigger ratification
+
+*Click:* "Evaluate for T2 to T3 promotion"
+
+*What appears:*
+
+* RatificationPanel appears with amber border
+* Shows: "RATIFICATION REQUIRED"
+* Case details: verified chains, rolling accuracy, notable successes, near misses
+* Approve and Reject buttons
+* TierPipeline shows dashed border on T3 node (target)
+
+=== Step 3: Approve ratification
+
+*Click:* "Approve" button in the RatificationPanel
+
+*What appears:*
+
+* PromotionEvent card: "PROMOTED" T2 to T3, "Ratified by: human-admin"
+* TierPipeline updates: agent moves to T3
+* NarrativeCard with humor beat and turn
+
+== Layer 3: The Floor
+
+=== Step 1: Enter Layer 3
+
+*Click:* Sidebar "The Floor" or press `3`
+
+*What appears:*
+
+* TierPipeline with agent at T3
+* Scenario description card explaining the falsified outcome
+* A red "Falsified outcome arrives" button
+
+=== Step 2: Trigger demotion
+
+*Click:* "Falsified outcome arrives"
+
+*What appears:*
+
+* Brief "Verifying outcome against ledger..." pulse animation
+* DemotionEvent card appears with red "DEMOTED" label, drop animation
+* Shows T3 to T2, trigger: "Falsified action", failed chain correlation ID
+* TierPipeline updates: agent drops to T2
+* LedgerTrail shows the demotion entry with correlation ID
+* NarrativeCard with humor beat and turn
+
+*Watch for:* The drop animation on the demotion card and the ledger entry appearing immediately.
+
+== The Close
+
+=== Step 1: Enter The Close
+
+*Click:* Sidebar "The Close" or press `4`
+
+*What appears:*
+
+* Roster showing all registered agents with tier badges, ceilings, and accuracy
+* The belief sentence centered in a highlighted card
+* Red Hat story card with platform positioning
+
+== Fallback Procedures
+
+=== Service not responding
+
+*Symptom:* Clicking "Send action to the gate" or "Evaluate" does nothing, or the browser console shows network errors.
+
+*Fix:*
+
+. Check the agent-promotion-line service is running: `curl http://localhost:8000/api/v1/authority/health-probe`
+. If not running, start it: `cd agent-promotion-line && source .venv/bin/activate && uvicorn app.main:app --port 8000`
+. Refresh the demo browser tab
+
+=== State contaminated from previous run
+
+*Symptom:* Layer 0 shows an agent already at T1 or higher, or the roster has unexpected entries.
+
+*Fix:*
+
+. Restart the agent-promotion-line service to clear in-memory state
+. Refresh the demo browser tab
+. Press `R` or click Reset
+
+=== Ratification request not found
+
+*Symptom:* Clicking Approve in Layer 2 returns a 404 error.
+
+*Fix:*
+
+. The ratification request may have expired or the service restarted
+. Press `2` to re-enter Layer 2 and click "Evaluate" again to generate a new request

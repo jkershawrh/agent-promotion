@@ -1,0 +1,30 @@
+= Agent Promotion Line -- Governed Authority for Autonomous Agents
+
+An agent governance layer that grants, raises, and revokes each agent's authority to act, based on its verified track record in the ARE Immutable Ledger. Authority is earned by evidence, enforced by the gate, and revoked without delay.
+
+== What You Will Experience
+
+* *Earn* -- watch an agent build a track record and earn a promotion
+* *Refuse* -- see the gate block an above-ceiling action before it executes
+* *Revoke* -- watch trust get walked back the moment a failure is verified
+* *HITL* -- see a high-authority promotion require human ratification
+* *Provenance* -- every decision hash-chained in the ARE Immutable Ledger
+
+== Technology
+
+* *Red Hat OpenShift* -- the platform for agents and governance
+* *ARE Immutable Ledger* -- tamper-evident compliance trail
+* *Python / FastAPI* -- promotion service (CPU-native, no GPU required)
+* *React / React Flow / Framer Motion* -- visual demo with animated pipeline
+* *Apache 2.0* -- fully open source and inspectable
+
+== Key Metrics
+
+* *Five authority tiers* from advisory-only to critical operations
+* *Two operating modes* for full automation or human-gated high tiers
+* *Immediate demotion* on falsified actions in both modes
+* *180 tests* across CDD, TDD, BDD, EDD, and CBT disciplines
+
+== Powered by
+
+Red Hat OpenShift {bullet} ARE Immutable Ledger {bullet} FastAPI {bullet} React Flow {bullet} Framer Motion

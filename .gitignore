@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+dist/
+build/
+*.egg
+
+# Node
+node_modules/
+demo/dist/
+demo/tsconfig.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets / env
+.env
+.env.*
+*.pem
+*.key
+!demo/package-lock.json
+
+# Claude Code
+.claude/
+
+# Build prompts (internal)
+*-build-prompt.md
+
+# Local overrides
+demo/nginx-local.conf

@@ -1,0 +1,151 @@
+= Presenter Guide
+:toc: left
+:toclevels: 3
+
+This guide covers what to say at each layer of the Agent Promotion Line demo.
+The demo has four layers plus a close, each descending one level deeper into how autonomous agents earn and lose trust.
+Use the xref:demo-script.adoc[Demo Script] for exact clicks and expected results; this document covers what to say.
+
+== Before You Start
+
+* Open the Agent Promotion Line demo in a browser
+* Verify the agent-promotion-line service is running (`GET /api/v1/authority/health-probe` returns 200)
+* The demo app sidebar shows five layers (0 through 4) and a Reset button
+* Press `R` or click Reset to clear state before starting
+* Have this guide open on a second screen or printed
+
+== Part 1: The Hook
+
+=== Layer 0: You do not hand the new hire the keys (90 seconds)
+
+*Key message:* "Autonomous agents must be consequence-scoped from the first moment. The scoping is enforced, not advisory."
+
+Say: "We have a new agent. It just arrived. It is on probation. Like any new hire, it is very keen and would very much like to do something useful. Let us see what happens when it tries."
+
+Click *Send action to the gate*.
+
+Say: "The agent proposed a scaling decision -- consequence score 30. The gate refused it. The agent is at T0, advisory only. Its ceiling is zero. It physically cannot execute anything above that ceiling."
+
+*Humor beat:* "Very keen. Not yet allowed near anything important."
+
+*The turn:* "Here is the difference. A human new hire on day one might still grab the keys if nobody is looking. This one physically cannot, because the gate enforces it. Restraint here is guaranteed, not hoped for."
+
+*When it pauses:* If the room asks how it ever gets to act, that is the question that opens Layer 1. Say: "That is exactly the right question. Let me show you."
+
+If the room does not ask, say: "So the natural question is -- how does it ever earn the keys?"
+
+== Part 2: The Earn
+
+=== Layer 1: Trust is a track record, not a title (120 seconds)
+
+*Key message:* "Promotion is earned by evidence, not granted by configuration. The promotion itself has receipts."
+
+Say: "The agent handles low-stakes advisory actions. Each one goes through a cycle: predict, act, verify the outcome. Every cycle is a chain in the ledger. The record fills."
+
+Click *Build track record*.
+
+Say: "55 verified chains. Rolling accuracy above 60%. That meets the promotion criteria for T0 to T1."
+
+Click *Evaluate for promotion*.
+
+Say: "Promoted. The consequence ceiling just rose from 0 to 25. The agent can now autonomously execute low-risk operations -- restart a pod, clear a log backlog, run a health check."
+
+Click *Test a low-risk action at T1*.
+
+Say: "The gate allows it. Consequence 10, ceiling 25. It is within scope."
+
+*Humor beat:* "Unlike the new hire who thinks two good weeks means they run the place, this one has to actually hit the number."
+
+*The turn:* "A person's promotion is often a manager's gut feel. This one is an auditable record you can inspect. The promotion itself has receipts."
+
+*When it pauses:* The thread here is: who checks the record, and what happens at the big promotion? If the room pulls, go to Layer 2. If not, say: "So it earned the small promotion. But what about the big one -- the one that grants real authority?"
+
+== Part 3: The Depth
+
+=== Layer 2: You do not let people promote themselves into signing authority (120 seconds)
+
+*Key message:* "High-authority promotions require a human to ratify. The system will not self-grant the high tier."
+
+Say: "We are now in HITL_HIGH_TIER mode. The agent has earned its way to T2 -- Trusted, ceiling 50. The next promotion would take it to T3 -- Autonomous, ceiling 100. That is the tier where it can failover a region, drain a node, deploy to production."
+
+Click *Evaluate for T2 to T3 promotion*.
+
+Say: "The system did not auto-promote. It assembled a case -- chain count, rolling accuracy, notable successes, near misses -- and queued it for a human to review."
+
+Point to the RatificationPanel.
+
+Say: "This is the case. 500 chains. 88% rolling accuracy. The system is showing you its work. You decide."
+
+Click *Approve*.
+
+Say: "Promoted to T3. Ratified by a human. Recorded in the ledger."
+
+*Humor beat:* "The agent tried to fast-track itself into signing authority. Nice try. Even here, it does not get to grade its own promotion."
+
+*The turn:* "A person can quietly exceed the authority you gave them. This one cannot, because the tier and the gate are enforced, and the high tier requires a human who is not the agent."
+
+*When it pauses:* The thread is: what happens when a trusted agent gets it wrong? If the room asks, that is Layer 3. Say: "That is the real test of a trust system. Not the promotion. The failure."
+
+== Part 4: The Floor
+
+=== Layer 3: What happens when someone you trusted screws up (90 seconds)
+
+*Key message:* "Demotion is immediate and automatic. It never waits on a human. The failure is on the record before it finishes happening."
+
+Say: "The agent is at T3. It took an action at its ceiling -- consequence score 100. A regional failover. Later, the outcome was verified. It was wrong."
+
+Click *Falsified outcome arrives*.
+
+Say: "Demotion. Immediate. T3 to T2. The failed chain is highlighted. The demotion is recorded in the ledger with the falsified correlation ID. No meeting. No delay. No human gate."
+
+Point to the LedgerTrail.
+
+Say: "The demotion entry is already in the ledger. The agent's authority was pulled the moment the failure was verified."
+
+*Humor beat:* "Unlike a certain colleague, it cannot blame the intern. The whole thing is on the record."
+
+*The turn:* "A person who fails might hide it, delay reporting it, or keep acting while you decide what to do. This one is demoted the moment the failure is verified. The demotion never waits on a human. And the mistake is on the record before it finishes happening."
+
+== The Close
+
+=== The turn, stated whole (60 seconds)
+
+Say: "Everything you just watched is how you would want to trust a person. Earns authority by being right. Needs a human for the big grant. Gets walked back when wrong."
+
+Pause. Let the room sit with it.
+
+Say: "Except this one cannot exceed the authority it earned. Cannot hide a mistake. And cannot have a bad day."
+
+*Key message:* That is the sentence they repeat.
+
+=== The Red Hat Story (30 seconds)
+
+Say: "This runs on OpenShift. The authority decisions are hash-chained in the ARE Immutable Ledger. The promotion pipeline, the gate, and the ledger client are open source, Apache 2.0, inspectable. The governance layer is pure CPU. No GPU required to trust your agents."
+
+Say: "Governed AI on the platform you already run."
+
+== Common Audience Questions
+
+=== "What if the agent needs to act faster than a human can ratify?"
+
+Low-tier actions are auto-authorized. The human gate only applies to high-consequence promotions, not to individual actions within an earned tier. An agent at T2 can act on anything up to consequence 50 without waiting.
+
+=== "How do you define the consequence score?"
+
+The consequence score comes from the existing consequence scoper, which computes blast radius as a function of affected users, violation magnitude, and scope. It is a number, not a category, so the gate comparison is deterministic.
+
+=== "What if the ledger is down?"
+
+The gate decision is local -- it compares the agent's ceiling to the action's score. The ledger records the decision after the fact for audit. A ledger outage does not block the gate. It does mean the audit trail has a gap, which is itself flagged.
+
+=== "Can a demoted agent be re-promoted?"
+
+Yes. The promotion criteria still apply. The agent would need to rebuild its track record from the demotion point. There is no shortcut.
+
+=== "How is this different from RBAC?"
+
+RBAC grants static permissions. This system grants dynamic authority based on empirical performance. An agent's authority changes with its track record. RBAC is who-can-do-what. This is who-has-earned-the-right-to-do-what.
+
+=== "Does this work for non-infrastructure agents?"
+
+The tier model and gate are domain-agnostic. The consequence score is the interface. Any agent that produces a consequence score can be governed by this system. The demo uses infrastructure operations because the stakes are immediately visible, but the same architecture applies to financial operations, clinical decision support, or any domain where consequence scales.

@@ -1,0 +1,137 @@
+= Lab Guide
+:toc: left
+:toclevels: 3
+
+This is a self-paced lab for attendees who want to experience how autonomous agents earn, lose, and are refused authority.
+You will watch an agent be blocked, earn a promotion, go through a human-ratified promotion, and get demoted when it fails.
+
+== Prerequisites
+
+* A modern web browser (Chrome, Firefox, Edge, Safari)
+* The Agent Promotion Line demo URL provided by your lab instructor
+* No local software installation required -- everything runs in the browser
+
+== Step 1: Open the Demo
+
+When you open the Agent Promotion Line URL, you will see a dark-themed dashboard with a sidebar on the left.
+
+. The sidebar shows five layers: The Hook, The Earn, The Depth, The Floor, The Close
+. Each layer is numbered 0 through 4
+. You can jump to any layer by clicking it or pressing the corresponding number key
+. The Reset button (or press `R`) clears all state
+
+== Step 2: Watch the Hook (Layer 0)
+
+Click *The Hook* in the sidebar or press `0`.
+
+You will see a pipeline of five authority tiers (T0 through T4) and a queue of pending actions.
+
+. Click *Send action to the gate*
+. Watch for:
+** The gate decision card appears with a red *REFUSED* animation
+** The pipeline edge from T0 to T1 shows *BLOCKED*
+** The agent proposed an action with consequence score 30, but its ceiling is 0
+
+[cols="1,3"]
+|===
+| What happened | What it means
+
+| *Gate refused*
+| The agent at T0 (PROBATION) cannot execute any action with consequence above 0. The gate enforces this. The agent is advisory only.
+|===
+
+The key idea: restraint is guaranteed, not hoped for.
+
+== Step 3: Watch the Earn (Layer 1)
+
+Click *The Earn* in the sidebar or press `1`.
+
+. Click *Build track record (55 verified chains)* -- watch the chain dots fill in green
+. Click *Evaluate for promotion* -- watch the agent move from T0 to T1 in the pipeline
+. Click *Test a low-risk action at T1* -- watch the gate return *ALLOWED*
+
+[cols="1,3"]
+|===
+| What happened | What it means
+
+| *Track record filled*
+| 55 verified chains: each one a predict, act, verify cycle recorded in the ledger.
+
+| *Promotion T0 to T1*
+| The agent met the criteria: 50+ chains and 60%+ rolling accuracy. Its ceiling rose from 0 to 25.
+
+| *Low-risk action allowed*
+| Consequence 10 is within the T1 ceiling of 25. The gate allows it.
+|===
+
+The key idea: promotion is earned by evidence, not granted by configuration.
+
+== Step 4: Try HITL Mode (Layer 2)
+
+Click *The Depth* in the sidebar or press `2`.
+
+The agent is at T2 (TRUSTED, ceiling 50) in HITL_HIGH_TIER mode.
+
+. Click *Evaluate for T2 to T3 promotion* -- the system does not auto-promote
+. Read the ratification case: chain count, rolling accuracy, notable successes, near misses
+. Click *Approve* to ratify the promotion (or *Reject* to deny it)
+
+[cols="1,3"]
+|===
+| What happened | What it means
+
+| *Ratification queued*
+| The promotion into T3 (AUTONOMOUS, ceiling 100) is high-consequence. The system assembled a case and queued it for a human.
+
+| *Human approved*
+| Only after the human ratified did the promotion apply. The system will not self-grant high authority.
+|===
+
+The key idea: the agent cannot grade its own promotion.
+
+NOTE: In FULL_AUTO mode, this same promotion would apply automatically. HITL_HIGH_TIER gates only the high tiers.
+
+== Step 5: Trigger a Demotion (Layer 3)
+
+Click *The Floor* in the sidebar or press `3`.
+
+The agent is at T3 (AUTONOMOUS, ceiling 100). It took an action at its ceiling that was later falsified.
+
+. Click *Falsified outcome arrives*
+. Watch for:
+** The demotion card drops into view: T3 to T2
+** The failed chain correlation ID appears in red
+** The ledger trail shows the demotion entry immediately
+
+[cols="1,3"]
+|===
+| What happened | What it means
+
+| *Immediate demotion*
+| The agent was demoted the moment the falsified outcome was verified. No meeting. No delay. No human gate.
+
+| *Ledger entry recorded*
+| The demotion entry is in the ARE Immutable Ledger with the falsified correlation ID. The full chain is auditable.
+|===
+
+The key idea: demotion never waits on a human. Pulling authority is immediate.
+
+== Step 6: Explore the Roster (The Close)
+
+Click *The Close* in the sidebar or press `4`.
+
+. Review the roster: all registered agents with their current tier, ceiling, and mode
+. Read the belief sentence: "I can trust it the way I would trust a good employee, except it cannot exceed its authority, cannot hide a mistake, and cannot have a bad day."
+. Review the Red Hat platform story
+
+== Closing
+
+You have now:
+
+. Seen an autonomous agent blocked from acting above its authority (the gate)
+. Watched it earn a promotion through a verified track record (the earn)
+. Seen a high-authority promotion require human ratification (HITL)
+. Watched trust be walked back immediately when an action was falsified (demotion)
+. Reviewed the full audit trail in the ARE Immutable Ledger (provenance)
+
+The key takeaway: *agent authority is earned by evidence, enforced by the gate, and revoked without delay. Governed AI on the platform you already run.*

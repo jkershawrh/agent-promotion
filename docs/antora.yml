@@ -1,0 +1,5 @@
+name: agent-promotion-line
+title: Agent Promotion Line
+version: '0.1'
+nav:
+  - modules/ROOT/nav.adoc

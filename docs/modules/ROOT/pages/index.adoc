@@ -1,0 +1,79 @@
+= Agent Promotion Line
+:page-layout: home
+
+== What is the Agent Promotion Line?
+
+A governance layer that grants, raises, and revokes each agent's authority to act, based on its verified track record. Authority is the dynamic form of consequence-scoping: an agent's consequence ceiling moves with its proven record.
+
+[quote]
+____
+I can trust it the way I would trust a good employee, except it cannot exceed its authority, cannot hide a mistake, and cannot have a bad day.
+____
+
+== The Five Tiers
+
+[cols="1,2,2,2"]
+|===
+| Tier | Name | Consequence Ceiling | Can Execute
+
+| *T0*
+| PROBATION
+| Advisory only (0)
+| Propose only. Every action routes to a human.
+
+| *T1*
+| VERIFIED
+| Low (25)
+| Autonomous on low-blast-radius actions.
+
+| *T2*
+| TRUSTED
+| Medium (50)
+| Autonomous on medium-blast-radius actions.
+
+| *T3*
+| AUTONOMOUS
+| High (100)
+| Autonomous on high-blast-radius actions.
+
+| *T4*
+| PRINCIPAL
+| Critical (1000)
+| Autonomous on critical actions. Entry always requires human ratification.
+|===
+
+== Three Visible Behaviors
+
+. *Earn.* An agent with a clean verified record is promoted and its consequence ceiling rises.
+. *Revoke.* An agent whose action is later falsified is demoted immediately and its ceiling drops.
+. *Refuse.* An agent attempting an action above its current ceiling is blocked, never silently allowed.
+
+== Two Operating Modes
+
+- *FULL_AUTO:* promotions and demotions apply automatically when criteria are met or violated.
+- *HITL_HIGH_TIER:* low-tier promotions apply automatically; promotions into high-consequence tiers require a human to ratify before they take effect.
+
+Demotion is always immediate and automatic in both modes. Only promotion into high authority is ever gated by a human.
+
+== Red Hat + Intel Positioning
+
+- *OpenShift* is the platform where agents and the promotion service run
+- *ARE Immutable Ledger* provides the tamper-evident compliance trail
+- *Apache 2.0* -- the promotion pipeline, the gate, the ledger client are all inspectable
+- *CPU-native* -- governance runs on the infrastructure you already have, no GPU required
+- *Compliance-ready* -- EU AI Act Article 12 traceability, SOC 2 Type II, NIST AI RMF
+
+== Project Structure
+
+....
+agent-promotion-line/
+  app/
+    authority/        -- promotion, demotion, gate, ratification, mode
+    domain/           -- Pydantic contracts, config loader
+    ledger/           -- ARE Ledger client
+    main.py           -- FastAPI application
+  demo/               -- React visual demo (Vite + React Flow + Framer Motion)
+  docs/               -- Antora documentation
+  config/defaults/    -- authority.yaml (tier tables, thresholds)
+  tests/              -- CDD, TDD, BDD, EDD test suites
+....

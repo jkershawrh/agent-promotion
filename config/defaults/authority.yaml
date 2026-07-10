@@ -1,0 +1,50 @@
+# Authority tier definitions and promotion/demotion thresholds.
+# Ceilings and thresholds must increase monotonically by tier.
+
+tiers:
+  T0:
+    name: PROBATION
+    ceiling: 0.0
+    description: "Advisory only. Every action routes to a human or higher-tier agent."
+  T1:
+    name: VERIFIED
+    ceiling: 25.0
+    description: "Autonomous on low-blast-radius actions."
+  T2:
+    name: TRUSTED
+    ceiling: 50.0
+    description: "Autonomous on medium-blast-radius actions."
+  T3:
+    name: AUTONOMOUS
+    ceiling: 100.0
+    description: "Autonomous on high-blast-radius actions."
+  T4:
+    name: PRINCIPAL
+    ceiling: 1000.0
+    description: "Autonomous on critical actions. Entry always requires human ratification."
+
+promotion:
+  T0_to_T1:
+    min_verified_chains: 50
+    min_rolling_accuracy: 0.60
+    extra_gate: none
+  T1_to_T2:
+    min_verified_chains: 200
+    min_rolling_accuracy: 0.75
+    extra_gate: none
+  T2_to_T3:
+    min_verified_chains: 500
+    min_rolling_accuracy: 0.85
+    extra_gate: hitl_if_mode
+  T3_to_T4:
+    min_verified_chains: 1000
+    min_rolling_accuracy: 0.90
+    extra_gate: hitl_always
+
+maintenance:
+  accuracy_margin: 0.10
+  window_size: 500
+
+modes:
+  - FULL_AUTO
+  - HITL_HIGH_TIER
